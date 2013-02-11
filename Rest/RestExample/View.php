@@ -2,6 +2,8 @@
 
 namespace RestExample;
 
+use RestExample\Exception\RepresentationNotFound;
+
 class View {
     
     /** @var array */
@@ -24,20 +26,31 @@ class View {
     }
     
     /**
-     * Handles the view rendering.
-     * And sets the body content.
      * 
-     * @throws \Exception
+     * @param \RestExample\Request $request
+     * @return \RestExample\View
      */
-    public function render() {
-        $file_name = BASE_PATH . '/View/' . $this->getRequest()->getHttpAccept() . '/' . strtolower($this->getRequest()->getControllerName()) . '.php'; 
-        if (!file_exists($file_name)) {
-            throw new \Exception("No file found with the name $file_name");
-        }
-        ob_start();
-        include_once $file_name;
-        $data = ob_get_clean();
-        $this->getResponse()->setBody($data);
+    public function setRequest(Request $request) {
+        $this->_request = $request;
+        return $this;
+    }
+    
+    /**
+     * 
+     * @return Request
+     */
+    public function getRequest() {
+        return $this->_request;
+    }
+    
+    /**
+     * 
+     * @param \RestExample\Respone $response
+     * @return \RestExample\View
+     */
+    public function setResponse(Respone $response) {
+        $this->_response = $response;
+        return $this;
     }
     
     /**
@@ -48,13 +61,6 @@ class View {
         return $this->_response;
     }
     
-    /**
-     * 
-     * @return Request
-     */
-    public function getRequest() {
-        return $this->_request;
-    }
     
     /**
      * 
@@ -77,6 +83,24 @@ class View {
             return null;
         }
         return $this->_params[$key];
+    }
+    
+    /**
+     * Handles the view rendering.
+     * And sets the body content.
+     * 
+     * 
+     * @throws RepresentationNotFound
+     */
+    public function render() {
+        $file_name = BASE_PATH . '/View/' . $this->getRequest()->getHttpAccept() . '/' . strtolower($this->getRequest()->getControllerName()) . '.php'; 
+        if (!file_exists($file_name)) {
+            throw new RepresentationNotFound("No file found with the name $file_name");
+        }
+        ob_start();
+        include_once $file_name;
+        $data = ob_get_clean();
+        $this->getResponse()->setBody($data);
     }
 }
 

@@ -14,34 +14,24 @@ class Request {
     protected $_request_method;
     
     /** @var string */
-    protected $_action_method;
-    
-    /** @var string */
-    protected $_format;
-    
-    /** @var string */
-    protected $_content_type;
-    
-    /** @var string */
     protected $_http_accept = 'json';
+
+	protected $_map_request_to_action = array(
+		'GET' 	 => 'get',
+		'POST'	 => 'add',
+		'PUT'	 => 'update',
+		'DELETE' => 'delete'
+	);
+
     
     const DEFAULT_CONTROLLER = 'Index';
-    const DEFAULT_REQUEST_METHOD = 'GET';
-    const DEFAULT_CONTENT_TYPE = 'json';
-    const GET = 'get';
-    const POST = 'add';
-    const PUT = 'update';
-    const DELETE = 'delete';
     
     /**
      * Constructor...
      */
     public function __construct() {
-        $this->_request_params = $_REQUEST;
 		$this->_request_method = $_SERVER['REQUEST_METHOD'];
         $this->prepareHttpAccept();
-        isset($_SERVER['CONTENT_TYPE'])? 
-            $this->_content_type = $_SERVER['CONTENT_TYPE'] : self::DEFAULT_CONTENT_TYPE;
         $this->prepareRequestParams();
 		$url_path = explode('/', $_SERVER['PATH_INFO']);
 		unset($url_path[0]);
@@ -50,15 +40,15 @@ class Request {
 
     }
 
-	/**
-	 * @param $key
-	 * @param $value
-	 * @return Request
-	 */
-	public function setParam($key, $value) {
-		$this->_request_params[$key] = $value;
-		return $this;
-	}
+    /**
+     * @param $key
+     * @param $value
+     * @return Request
+     */
+    public function setParam($key, $value) {
+            $this->_request_params[$key] = $value;
+            return $this;
+    }
 
     /**
      * 
@@ -135,48 +125,30 @@ class Request {
      * @return string
      */
     public function getActionMethod() {
-        return $this->_action_method;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getContentType() {
-        return $this->_content_type;
+		return $this->_map_request_to_action[$this->getRequestMethod()];
     }
     
     /**
      * Takes care of setting the correct request method.
      */
     protected function prepareRequestParams() {
-        $data = null;
         switch ($this->getRequestMethod()) {
-            case 'GET' : 
-                $data = $_GET;
-                $this->_action_method = self::GET;
-                break;
             case 'POST' : 
                 $data = $_POST;
-                $this->_action_method = self::POST;
                 break;
             case 'PUT' :
                 parse_str(file_get_contents('php://input'), $data);
-                $this->_action_method = self::PUT;
                 break;
-            case 'DELETE' :
-                parse_str(file_get_contents('php://input'), $data);
-                $this->_action_method = self::DELETE;
-                break;
-            default : 
-                // do nothing...
+            CASE 'GET' :
+			CASE 'DELETE' :
+			default : 
+                // do nothing when GET or DELETE, as we don't accept any data from these two request methods...
         }
         
-        $this->_request_params = $data;
+        $this->_request_params = isset($data)? $data :null;
     }
 
 	protected function prepareHttpAccept() {
-
 		if (strpos($_SERVER['HTTP_ACCEPT'], 'json')) {
 			$this->_http_accept = 'json';
 			return;
@@ -191,6 +163,5 @@ class Request {
 			$this->_http_accept = 'xml';
 			return;
 		}
-
 	}
 }

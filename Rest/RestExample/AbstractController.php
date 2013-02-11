@@ -103,12 +103,10 @@ abstract class AbstractController {
     
     /**
      * Calls the view render method and passes the request and response.
+	 * 
+	 * @return string|null
      */
     public function execute() {
-	    try {
-        $this->getView()->render($this->_request, $this->_response);
-	    } catch (\Exception $e) {
-		    throw new \Exception($e->getMessage());
-	    }
+    	return $this->getView()->render($this->_request, $this->_response);
     }
 }

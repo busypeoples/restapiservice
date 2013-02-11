@@ -2,7 +2,7 @@
 
 namespace RestExample\Helper;
 
-class StatusCode {
+class Http {
 
 	const STATUS_CODE_200 = "200 Ok";
 	const STATUS_CODE_201 = "201 CREATED";
@@ -38,15 +38,13 @@ class StatusCode {
 
 	public static function getContentType($request_method) {
 		switch($request_method) {
-			case 'json' :
-				return 'application/json';
-				break;
 			case 'xml' :
 				return 'application/xml';
 				break;
 			case 'html' :
 				return 'text/html';
 				break;
+			case 'json' : 
 			default :
 				return 'application/json';
 		}
