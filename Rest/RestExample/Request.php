@@ -23,7 +23,7 @@ class Request {
     protected $_content_type;
     
     /** @var string */
-    protected $_http_accept;
+    protected $_http_accept = 'json';
     
     const DEFAULT_CONTROLLER = 'Index';
     const DEFAULT_REQUEST_METHOD = 'GET';
@@ -39,7 +39,7 @@ class Request {
     public function __construct() {
         $this->_request_params = $_REQUEST;
 		$this->_request_method = $_SERVER['REQUEST_METHOD'];
-        $this->_http_accept = (strpos($_SERVER['HTTP_ACCEPT'], 'json')) ? 'json' : 'html';
+        $this->prepareHttpAccept();
         isset($_SERVER['CONTENT_TYPE'])? 
             $this->_content_type = $_SERVER['CONTENT_TYPE'] : self::DEFAULT_CONTENT_TYPE;
         $this->prepareRequestParams();
@@ -49,11 +49,11 @@ class Request {
 		$this->setParam('id', array_shift($url_path));
 
     }
-    
+
 	/**
-	 *
-	 * @param string $key
-	 * @param mixed $value
+	 * @param $key
+	 * @param $value
+	 * @return Request
 	 */
 	public function setParam($key, $value) {
 		$this->_request_params[$key] = $value;
@@ -174,4 +174,23 @@ class Request {
         
         $this->_request_params = $data;
     }
+
+	protected function prepareHttpAccept() {
+
+		if (strpos($_SERVER['HTTP_ACCEPT'], 'json')) {
+			$this->_http_accept = 'json';
+			return;
+		}
+
+		if (strpos($_SERVER['HTTP_ACCEPT'], 'html')) {
+			$this->_http_accept = 'html';
+			return;
+		}
+
+		if (strpos($_SERVER['HTTP_ACCEPT'], 'xml')) {
+			$this->_http_accept = 'xml';
+			return;
+		}
+
+	}
 }

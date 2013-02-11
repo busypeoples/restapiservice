@@ -11,7 +11,7 @@ class User extends AbstractController {
 		if ($id) {
 			$data = array('message' => 'retrieved the data for ID : ' . $id);
 		} else {
-        	$data = array('message' => __FUNCTION__, 'data' => array(array(1, 'ID : 1', 45), array(2, 'ID : 2', 33)));
+        	$data = array('message' => 'retrieved all data.');
         }
 		$this->getView()->setParam('data', $data);
     }
