@@ -38,18 +38,31 @@ class Request {
      */
     public function __construct() {
         $this->_request_params = $_REQUEST;
-        $url_path = array_reverse(explode('/', $_SERVER['REQUEST_URI']));
-        $this->_controller = array_shift($url_path);
-        $this->_request_method = $_SERVER['REQUEST_METHOD'];
+		$this->_request_method = $_SERVER['REQUEST_METHOD'];
         $this->_http_accept = (strpos($_SERVER['HTTP_ACCEPT'], 'json')) ? 'json' : 'html';
         isset($_SERVER['CONTENT_TYPE'])? 
             $this->_content_type = $_SERVER['CONTENT_TYPE'] : self::DEFAULT_CONTENT_TYPE;
         $this->prepareRequestParams();
+		$url_path = explode('/', $_SERVER['PATH_INFO']);
+		unset($url_path[0]);
+		$this->_controller = array_shift($url_path);
+		$this->setParam('id', array_shift($url_path));
+
     }
     
+	/**
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public function setParam($key, $value) {
+		$this->_request_params[$key] = $value;
+		return $this;
+	}
+
     /**
      * 
-     * @param type $key
+     * @param string $key
      * @return mixed|null
      */
     public function getParam($key) {

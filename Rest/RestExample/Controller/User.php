@@ -6,25 +6,32 @@ use RestExample\AbstractController;
 class User extends AbstractController {
     
     public function get() {
-        
-        $data = array('message' => __FUNCTION__, 'data' => array(array(1, 'userA', 45), array(4, 'userB', 33)));
-        $this->getView()->setParam('data', $data);
+       	
+		$id = $this->getRequest()->getParam('id');
+		if ($id) {
+			$data = array('message' => 'retrieved the data for ID : ' . $id);
+		} else {
+        	$data = array('message' => __FUNCTION__, 'data' => array(array(1, 'ID : 1', 45), array(2, 'ID : 2', 33)));
+        }
+		$this->getView()->setParam('data', $data);
     }
     
     public function add() {
-        $data = array('message' => __FUNCTION__, 'data' => 'added some new user');
+        
+		$data = array('message' => __FUNCTION__, 'data' => 'added some new user');
         $this->getView()->setParam('data', $data);
     }
     
     public function update() {
-                  $id = $this->getRequest()->getParam('id');
+        $id = $this->getRequest()->getParam('id');
 
-        $data = array('message' => __FUNCTION__, 'data' => 'updated whatever was needed with the id ' . $id);
+        $data = array('message' => 'Called Action : ' . __FUNCTION__ . '... successfully updated ID : ' . $id);
         $this->getView()->setParam('data', $data);
     }
     
     public function delete() {
-        $data = array('message' => __FUNCTION__, 'data' => 'successfully deleted this one!.');
+        $id = $this->getRequest()->getParam('id');
+		$data = array('message' => 'Called Action : ' .  __FUNCTION__ . '...  successfully deleted ID : ' . $id);
         $this->getView()->setParam('data', $data);
     }
     
