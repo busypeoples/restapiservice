@@ -90,6 +90,7 @@ class View {
      * And sets the body content.
      * 
      * 
+     * @return string|null
      * @throws RepresentationNotFound
      */
     public function render() {
@@ -100,7 +101,7 @@ class View {
         ob_start();
         include_once $file_name;
         $data = ob_get_clean();
-        $this->getResponse()->setBody($data);
+        return $data;
     }
 }
 

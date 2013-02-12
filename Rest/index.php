@@ -7,19 +7,25 @@ $response->addHeader('Content-Type', \RestExample\Helper\Http::getContentType($r
 
 try {
 	$controller = \RestExample\Dispatcher::dispatch($request, $response);
-	$data = $controller->execute();
+	$body = $controller->execute();
+        $status_code = \RestExample\Helper\Http::STATUS_CODE_200;
 	if ($request->getRequestMethod() == 'POST') {
-	    $response->setStatusCode(\RestExample\Helper\Http::STATUS_CODE_201);
-	}
+	    $status_code = \RestExample\Helper\Http::STATUS_CODE_201;
+            // add Location header...
+            $response->addHeader('Location', 'newly created resouce uri');
+        }
 } catch(\RestExample\Exception\ResourceNotFound $e) {
-	$response->setStatusCode(\RestExample\Helper\Http::STATUS_CODE_404);
-	$response->setBody(null);
+	$status_code = \RestExample\Helper\Http::STATUS_CODE_404;
+	$body = null;        
 } catch(\RestExample\Exception\RepresentationNotFound $e) {
-	$response->setStatusCode(\RestExample\Helper\Http::STATUS_CODE_406);
-	$response->setBody(null);
+	$status_code = \RestExample\Helper\Http::STATUS_CODE_406;
+	$body = null;
 } catch(\Exception $e) {
-	$response->setStatusCode(\RestExample\Helper\Http::STATUS_CODE_404);
-	$response->setBody(null);
+	$status_code = \RestExample\Helper\Http::STATUS_CODE_404;
+	$body = null;
 }
 
+// prepare the response and then execute...
+$response->setStatusCode($status_code);
+$response->setBody($body);
 $response->execute();

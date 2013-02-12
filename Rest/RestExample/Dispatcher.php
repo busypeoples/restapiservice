@@ -16,10 +16,9 @@ class Dispatcher {
         $controller_name = $request->getControllerName();
 		$method = $request->getActionMethod();
 		$controller = '\RestExample\Controller\\' . $controller_name;
-		if (! class_exists($controller, FALSE)) {
-			throw new ResourceNotFound('Class Not Found');
+                if (! class_exists($controller)) {
+                   throw new ResourceNotFound('Class Not Found');
 		}
-		print 'what';
 		$controller = new $controller($request, $response);
 		$controller->$method();
 		return $controller;

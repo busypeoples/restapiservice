@@ -13,7 +13,7 @@ abstract class AbstractController {
     /** @var string */
     protected $_data;
     
-    /** @var \View */
+    /** @var View */
     protected $_view;
 
     /**
@@ -82,10 +82,11 @@ abstract class AbstractController {
 
     /**
      * 
-     * @param type $view
+     * 
+     * @param \RestExample\View $view
      * @return \RestExample\AbstractController
      */
-    public function setView($view) {
+    public function setView(View $view) {
         $this->view = $view;
         return $this;
     }
@@ -103,10 +104,15 @@ abstract class AbstractController {
     
     /**
      * Calls the view render method and passes the request and response.
-	 * 
-	 * @return string|null
+     * 
+     * @return string|null
      */
     public function execute() {
     	return $this->getView()->render($this->_request, $this->_response);
     }
+    
+    abstract public function get();
+    abstract public function add();
+    abstract public function update();
+    abstract public function delete();
 }
