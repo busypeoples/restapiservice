@@ -2,6 +2,8 @@
 
 namespace RestExample;
 
+use RestExample\Helper\Http;
+
 class Request {
     
     /** @var array */
@@ -133,18 +135,20 @@ class Request {
      */
     protected function prepareRequestParams() {
         switch ($this->getRequestMethod()) {
-            case 'POST' : 
-                $data = $_POST;
+            case 'GET' :
+				$data = Http::convertData($_GET, $this);
+				break;
+			case 'POST' : 
+        		$data = Http::convertData($_POST, $this);
+				break;
+			case 'PUT' :
+                $data = file_get_contents('php://input');
+				$data = Http::convertData($data, $this);
                 break;
-            case 'PUT' :
-                parse_str(file_get_contents('php://input'), $data);
-                break;
-            CASE 'GET' :
 			CASE 'DELETE' :
 			default : 
                 // do nothing when GET or DELETE, as we don't accept any data from these two request methods...
         }
-        
         $this->_request_params = isset($data)? $data :null;
     }
 

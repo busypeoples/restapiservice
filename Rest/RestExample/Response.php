@@ -88,7 +88,7 @@ class Response {
         header("HTTP/1.1 {$this->getStatusCode()}");
         
         foreach ($this->getHeaders() as $name => $value) {
-            header( $name . ' : ' . $value );
+            header( $name . ': ' . $value );
         }
         echo $this->getBody();
         // one final thing
