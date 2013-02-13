@@ -2,7 +2,7 @@
 
 namespace RestExample;
 
-use RestExample\Helper\Http;
+use RestExample\Helper\Converter;
 
 class Request {
     
@@ -136,14 +136,14 @@ class Request {
     protected function prepareRequestParams() {
         switch ($this->getRequestMethod()) {
             case 'GET' :
-				$data = Http::convertData($_GET, $this);
+				$data = Converter::convertData($_GET, $this);
 				break;
 			case 'POST' : 
-        		$data = Http::convertData($_POST, $this);
+        		$data = Converter::convertData($_POST, $this);
 				break;
 			case 'PUT' :
                 $data = file_get_contents('php://input');
-				$data = Http::convertData($data, $this);
+				$data = Converter::convertData($data, $this);
                 break;
 			CASE 'DELETE' :
 			default : 
