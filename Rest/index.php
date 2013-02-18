@@ -11,9 +11,9 @@ try {
         $status_code = \RestExample\Helper\Http::STATUS_CODE_200;
     if ($request->getRequestMethod() == 'POST') {
         $status_code = \RestExample\Helper\Http::STATUS_CODE_201;
-            // add Location header...
-            $response->addHeader('Location', 'newly created resouce uri');
-        }
+        // add Location header...
+        $response->addHeader('Location', 'newly created resouce uri');
+    }
 } catch(\RestExample\Exception\ResourceNotFound $e) {
     $status_code = \RestExample\Helper\Http::STATUS_CODE_404;
     $body = null;        
