@@ -17,6 +17,9 @@ class Request {
     
     /** @var string */
     protected $_http_accept = 'json';
+	
+	/** @var string */
+	protected $_content_type;
 
 	protected $_map_request_to_action = array(
 		'GET' 	 => 'get',
@@ -24,8 +27,11 @@ class Request {
 		'PUT'	 => 'update',
 		'DELETE' => 'delete'
 	);
-
-    
+	
+	const GET = 'GET';
+	const POST = 'POST';
+	const PUT = 'PUT';
+	const DELETE = 'DELETE';
     const DEFAULT_CONTROLLER = 'Index';
     
     /**
@@ -39,7 +45,7 @@ class Request {
 		unset($url_path[0]);
 		$this->_controller = array_shift($url_path);
 		$this->setParam('id', array_shift($url_path));
-
+		$this->_content_type = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : null;
     }
 
     /**
@@ -129,27 +135,47 @@ class Request {
     public function getActionMethod() {
 		return $this->_map_request_to_action[$this->getRequestMethod()];
     }
+
+	public function getContentType() {
+		return $this->_content_type;
+	}
+   
+   	/** @return bool */
+	public function isGet() {
+		return $this->getRequestMethod() === self::GET;
+	}
+	
+	/** return bool */
+	public function isPost() {
+		return $this->getRequestMethod() === self::POST;
+	}
+
+	/** @return bool */
+	public function isPut() {
+		return $this->getRequestMethod() === self::PUT;
+	}
     
-    /**
+	/** @return bool */
+	public function isDelete() {
+		return $this->getRequestMethod() === self::DELETE;
+	}
+
+	/**
      * Takes care of setting the correct request method.
      */
     protected function prepareRequestParams() {
         switch ($this->getRequestMethod()) {
-            case 'GET' :
-				$data = Converter::convertData($_GET, $this);
-				break;
-			case 'POST' : 
-        		$data = Converter::convertData($_POST, $this);
-				break;
-			case 'PUT' :
-                $data = file_get_contents('php://input');
+            case self::GET :
+			case self::POST : 
+			case self::PUT :
+                $data = trim(file_get_contents('php://input'));
 				$data = Converter::convertData($data, $this);
                 break;
-			CASE 'DELETE' :
+			CASE self::DELETE :
 			default : 
-                // do nothing when GET or DELETE, as we don't accept any data from these two request methods...
+                $data = array();
         }
-        $this->_request_params = isset($data)? $data :null;
+        $this->_request_params = $data;
     }
 
 	protected function prepareHttpAccept() {
