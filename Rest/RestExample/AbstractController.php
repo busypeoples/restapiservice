@@ -108,7 +108,7 @@ abstract class AbstractController {
      * @return string|null
      */
     public function execute() {
-    	return $this->getView()->render($this->_request, $this->_response);
+        return $this->getView()->render($this->_request, $this->_response);
     }
     
     abstract public function get();
