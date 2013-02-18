@@ -2,57 +2,29 @@
 
 namespace RestExample\Helper;
 
+use RestExample\Request as Request;
+
 class Converter {
 
-	const APPLICATION_XML  = 'application/xml';
-	const APPLICATION_HTML = 'text/html';
-	const APPLICATION_JSON = 'application/json';
+	const APPLICATION_XML  = 'application/xml; charset=utf-8';
+	const APPLICATION_HTML = 'text/html; charset=utf-8';
+	const APPLICATION_JSON = 'application/json; charset=utf-8';
 
-	const XML = 'xml';
-	const JSON = 'json';
-	const HTML = 'html';
-	
 	/**
 	 * simply returns a valid content header depending on the request method.
 	 *
 	 */
 	public static function getContentType($request_method) {
 		switch ($request_method) {
-			case self::XML :
+			case Request::XML :
 				return self::APPLICATION_XML;
 				break;
-			case self::HTML :
+			case Request::HTML :
 				return self::APPLICATION_HTML;
 				break;
-			case self::JSON : 
+			case Request::JSON : 
 			default :
 				return self::APPLICATION_JSON;
-		}
-	}
-	
-	/**
-	 * convert raw data input into an array
-	 * according to the http-accept value this can handle json, xml and text/html conversion
-	 *
-	 */
-	public static function convertData($data, $request) {
-		switch ($request->getHttpAccept()) {
-			case self::XML :
-				if (isset($data)) {
-			    	return json_decode(json_encode((array)simplexml_load_string($data)),1);	
-				}
-				return array();
-				break;
-			case self::JSON :
-				if (isset($data)) {
-					return json_decode($data, true);
-				}
-				return array();
-				break;
-			case self::HTML :
-			default :
-				parse_str($data, $request);
-				return $request;
 		}
 	}
 }
