@@ -84,7 +84,7 @@ class Response {
     /**
      * Takes care of sending the correct status, headers and body.
      */    
-    public function execute() {
+    public function output() {
         header("HTTP/1.1 {$this->getStatusCode()}");
         
         foreach ($this->getHeaders() as $name => $value) {

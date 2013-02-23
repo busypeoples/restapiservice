@@ -28,4 +28,4 @@ try {
 // prepare the response and then execute...
 $response->setStatusCode($status_code);
 $response->setBody($body);
-$response->execute();
+$response->output();
