@@ -7,10 +7,6 @@ use RestExample\Exception\MethodNotAllowed;
 
 class ResourceService {
     
-    const APPLICATION_XML  = 'application/xml; charset=utf-8';
-    const APPLICATION_HTML = 'text/html; charset=utf-8';
-    const APPLICATION_JSON = 'application/json; charset=utf-8';
-    
     public function run() {
         $request = new Request();
         $response = new Response();
@@ -18,7 +14,7 @@ class ResourceService {
         try {
             $resource = $this->loadResource($request, $response);
             $this->callRequestMethod($request, $resource);
-            $response->addHeader('Content-Type', $this->getContentType($request->getHttpAccept()));
+            $response->addHeader('Content-Type', $request->getHttpAccept());
             $response->setBody($resource->getRepresentation());
         } catch(\Exception $e) {
             $response->setStatusCode($e->getCode());
@@ -51,23 +47,5 @@ class ResourceService {
         }
         
         $resource->$method();
-    }
-    
-    /**
-     * simply returns a valid content header depending on the request method.
-     *
-     */
-    protected function getContentType($request_method) {
-        switch ($request_method) {
-            case Request::XML :
-                return self::APPLICATION_XML;
-                break;
-            case Request::HTML :
-                return self::APPLICATION_HTML;
-                break;
-            case Request::JSON : 
-            default :
-                return self::APPLICATION_JSON;
-        }
     }
 }

@@ -14,16 +14,16 @@ class Request {
     protected $_request_method = self::GET;
     
     /** @var string */
-    protected $_http_accept = self::JSON;
+    protected $_http_accept = self::APPLICATION_JSON;
 
     const GET = 'GET';
     const POST = 'POST';
     const PUT = 'PUT';
     const DELETE = 'DELETE';
     
-    const XML = 'xml';
-    const JSON = 'json';
-    const HTML = 'html';
+    const APPLICATION_XML  = 'application/xml; charset=utf-8';
+    const APPLICATION_HTML = 'text/html; charset=utf-8';
+    const APPLICATION_JSON = 'application/json; charset=utf-8';
 
     /**
      * Constructor...
@@ -119,33 +119,34 @@ class Request {
      * Takes care of setting the correct request method.
      */
     protected function prepareRequestParams() {
+        $data = array();
         switch ($this->getRequestMethod()) {
             case self::GET :
             case self::POST : 
             case self::PUT :
-                $data = trim(file_get_contents('php://input'));
-                $data = $this->convertData($data);
+                $raw_input_data = trim(file_get_contents('php://input'));
+                $data = $this->convertData($raw_input_data);
                 break;
             CASE self::DELETE :
             default : 
-                $data = array();
+                // do nothing
         }
         $this->_request_params = $data;
     }
 
     protected function prepareHttpAccept() {
         if (strpos($_SERVER['HTTP_ACCEPT'], 'json')) {
-            $this->_http_accept = self::JSON;
+            $this->_http_accept = self::APPLICATION_JSON;
             return;
         }
 
         if (strpos($_SERVER['HTTP_ACCEPT'], 'html')) {
-            $this->_http_accept = self::HTML;
+            $this->_http_accept = self::APPLICATION_HTML;
             return;
         }
 
         if (strpos($_SERVER['HTTP_ACCEPT'], 'xml')) {
-            $this->_http_accept = self::XML;
+            $this->_http_accept = self::APPLICATION_XML;
             return;
         }
     }
@@ -157,20 +158,21 @@ class Request {
      */
     protected function convertData($data) {
         switch ($this->getHttpAccept()) {
-            case self::XML :
+            case self::APPLICATION_XML :
                 if (isset($data)) {
                     return json_decode(json_encode((array)simplexml_load_string($data)),1); 
                 }
                 return array();
                 break;
-            case self::JSON :
+            case self::APPLICATION_JSON :
                 if (isset($data)) {
                     return json_decode($data, true);
                 }
                 return array();
                 break;
-            case self::HTML :
+            case self::APPLICATION_HTML :
             default :
+                $request = array();
                 parse_str($data, $request);
                 return $request;
         }

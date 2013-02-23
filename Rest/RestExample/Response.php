@@ -122,4 +122,3 @@ class Response {
         echo $this->getBody();
     }
 }
-

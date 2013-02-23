@@ -2,7 +2,10 @@
 
 namespace RestExample;
 
-abstract class Resource {
+use RestExample\Exception\RepresentationNotFound;
+use RestExample\Request as Request;
+
+class Resource {
     
     /** @var Request */
     protected $_request;
@@ -12,6 +15,12 @@ abstract class Resource {
     
     /** @var array */
     protected $_params = array();
+    
+    protected $_http_accept_to_folder = array(
+        Request::APPLICATION_HTML => 'html',
+        Request::APPLICATION_JSON => 'json',
+        Request::APPLICATION_XML  => 'xml'
+    );
 
     /**
      * 
@@ -47,8 +56,8 @@ abstract class Resource {
      * @return \RestExample\Resource
      */
     public function setResponse(Response $response) {
-            $this->_response = $response;
-            return $this;
+        $this->_response = $response;
+        return $this;
     }
     
     /**
@@ -58,6 +67,7 @@ abstract class Resource {
     public function getResponse() {
         return $this->_response;
     }
+    
     /**
      * 
      * @param string $key
@@ -90,7 +100,9 @@ abstract class Resource {
      * @throws RepresentationNotFound
      */
     public function getRepresentation() {
-        $file_name = BASE_PATH . '/Representation/' . $this->getRequest()->getHttpAccept() . '/' . strtolower($this->getRequest()->getResourceName()) . '.php'; 
+        $file_name = BASE_PATH . '/Representation/' . 
+                                 $this->_http_accept_to_folder[$this->getRequest()->getHttpAccept()] . 
+                                 '/' . strtolower($this->getRequest()->getResourceName()) . '.php'; 
         if (!file_exists($file_name)) {
             throw new RepresentationNotFound();
         }
@@ -99,7 +111,9 @@ abstract class Resource {
         return $data = ob_get_clean();
     }
     
-    abstract public function getAction();
+    public function getAction() {
+        $this->getResponse()->setStatusCode(Response::STATUS_CODE_200); 
+    }
     
     public function postAction() {
         $this->getResponse()->setStatusCode(Response::STATUS_CODE_405); 
