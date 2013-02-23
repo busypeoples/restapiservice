@@ -4,7 +4,7 @@ namespace RestExample\Resource;
 
 class Users extends \RestExample\Resource {
 
-    public function get() {
+    public function getAction() {
         $id = $this->getRequest()->getParam('id');
         if ($id) {
             $data = array('message' => 'retrieved the data for user with the ID : ' . $id);
@@ -14,8 +14,8 @@ class Users extends \RestExample\Resource {
         $this->setParam('data', $data);
     }
 
-    public function add() {
-                $name = $this->getRequest()->getParam('name');
+    public function postAction() {
+        $name = $this->getRequest()->getParam('name');
         $data = array(
                     'message' => 'Called Action : ' . __FUNCTION__ .
                     '...successfully added a new user' . 
@@ -24,9 +24,9 @@ class Users extends \RestExample\Resource {
         $this->setParam('data', $data);
     }
 
-    public function update() {
+    public function putAction() {
         $id = $this->getRequest()->getParam('id');
-                $name = $this->getRequest()->getParam('name');    
+        $name = $this->getRequest()->getParam('name');    
         $data = array(
                         'message' => 'Called Action : ' . __FUNCTION__ . 
                         '... successfully updated ID : ' . $id . 
@@ -35,7 +35,7 @@ class Users extends \RestExample\Resource {
         $this->setParam('data', $data);
     }
 
-    public function delete() {
+    public function deleteAction() {
         $id = $this->getRequest()->getParam('id');
         $data = array(' message' => 'Called Action : ' .  __FUNCTION__ .
                               '...  successfully deleted user with the ID : ' . $id

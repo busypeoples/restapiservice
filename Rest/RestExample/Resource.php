@@ -101,17 +101,17 @@ abstract class Resource {
         return $data = ob_get_clean();
     }
     
-    abstract public function get();
+    abstract public function getAction();
     
-    public function add() {
+    public function postAction() {
         $this->_response->setStatusCode(Response::STATUS_CODE_405); 
     }
     
-    public function update() {
+    public function putAction() {
         $this->_response->setStatusCode(Response::STATUS_CODE_405); 
     }
     
-    public function delete(){
+    public function deleteAction(){
         $this->_response->setStatusCode(Response::STATUS_CODE_405);
     }
 }

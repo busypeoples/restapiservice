@@ -8,7 +8,7 @@ class Response {
     protected $_body;
     
     /** @var string */
-    protected $_status_code;
+    protected $_status_code = self::STATUS_CODE_200;
     
     /** @var array */
     protected $_headers = array();
@@ -78,9 +78,6 @@ class Response {
      * @return string
      */
     public function getStatusCode() {
-        if (! $this->_status_code ) {
-            return "200 OK";
-        }
         return $this->_status_code;
     }
     

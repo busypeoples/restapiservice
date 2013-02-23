@@ -8,24 +8,14 @@ class Request {
     protected $_request_params = array();
     
     /** @var string */
-    protected $_resource;
+    protected $_resource_name;
     
     /** @var string */
-    protected $_request_method;
+    protected $_request_method = self::GET;
     
     /** @var string */
-    protected $_http_accept = 'json';
-    
-    /** @var string */
-    protected $_content_type;
+    protected $_http_accept = self::JSON;
 
-    protected $_map_request_to_action = array(
-        'GET'    => 'get',
-        'POST'   => 'add',
-        'PUT'    => 'update',
-        'DELETE' => 'delete'
-    );
-    
     const GET = 'GET';
     const POST = 'POST';
     const PUT = 'PUT';
@@ -44,9 +34,8 @@ class Request {
         $this->prepareRequestParams();
         $url_path = explode('/', $_SERVER['PATH_INFO']);
         unset($url_path[0]);
-        $this->_resource = array_shift($url_path);
+        $this->_resource_name = array_shift($url_path);
         $this->setParam('id', array_shift($url_path));
-        $this->_content_type = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : null;
     }
 
     /**
@@ -96,7 +85,7 @@ class Request {
      * @return string
      */
     public function getResourceName() {
-        return ucfirst($this->_resource);
+        return ucfirst($this->_resource_name);
     }
 
     /**
@@ -124,18 +113,6 @@ class Request {
      */
     public function getRequestMethod() {
         return $this->_request_method;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getActionMethod() {
-        return $this->_map_request_to_action[$this->getRequestMethod()];
-    }
-
-    public function getContentType() {
-        return $this->_content_type;
     }
    
     /**
