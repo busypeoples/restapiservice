@@ -2,8 +2,6 @@
 
 namespace RestExample;
 
-use RestExample\Helper\Converter;
-
 class Request {
     
     /** @var array */
@@ -98,7 +96,7 @@ class Request {
      * 
      * @return string
      */
-    public function getControllerName() {
+    public function getResourceName() {
         if (!$this->_controller) {
             return self::DEFAULT_CONTROLLER;
         }

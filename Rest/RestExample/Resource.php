@@ -2,19 +2,17 @@
 
 namespace RestExample;
 
-use RestExample\Exception\RepresentationNotFound;
-
-class View {
-    
-    /** @var array */
-    protected $_params = array();
+abstract class Resource {
     
     /** @var Request */
     protected $_request;
     
-    /** @var Response */
+    /* @var Response */
     protected $_response;
     
+    /** @var array */
+    protected $_params = array();
+
     /**
      * 
      * @param \RestExample\Request $request
@@ -28,7 +26,7 @@ class View {
     /**
      * 
      * @param \RestExample\Request $request
-     * @return \RestExample\View
+     * @return \RestExample\Resource
      */
     public function setRequest(Request $request) {
         $this->_request = $request;
@@ -42,31 +40,22 @@ class View {
     public function getRequest() {
         return $this->_request;
     }
-    
+
     /**
      * 
-     * @param \RestExample\Respone $response
-     * @return \RestExample\View
+     * @param \RestExample\Response $response
+     * @return \RestExample\Resource
      */
-    public function setResponse(Respone $response) {
-        $this->_response = $response;
-        return $this;
+    public function setResponse(Response $response) {
+            $this->_response = $response;
+            return $this;
     }
     
-    /**
-     * 
-     * @return Response
-     */
-    public function getResponse() {
-        return $this->_response;
-    }
-    
-    
-    /**
+       /**
      * 
      * @param string $key
      * @param mixed $value
-     * @return \RestExample\View
+     * @return Resource
      */
     public function setParam($key, $value) {
         $this->_params[$key] = $value;
@@ -86,6 +75,15 @@ class View {
     }
     
     /**
+     * Calls the view render method and passes the request and response.
+     * 
+     * @return string|null
+     */
+    public function execute() {
+        return $this->createRepresentation();
+    }
+    
+      /**
      * Handles the view rendering.
      * And sets the body content.
      * 
@@ -93,15 +91,28 @@ class View {
      * @return string|null
      * @throws RepresentationNotFound
      */
-    public function render() {
-        $file_name = BASE_PATH . '/View/' . $this->getRequest()->getHttpAccept() . '/' . strtolower($this->getRequest()->getControllerName()) . '.php'; 
+    public function createRepresentation() {
+        $file_name = BASE_PATH . '/representation/' . $this->getRequest()->getHttpAccept() . '/' . strtolower($this->getRequest()->getResourceName()) . '.php'; 
         if (!file_exists($file_name)) {
-            throw new RepresentationNotFound("No file found with the name $file_name");
+            throw new RepresentationNotFound();
         }
         ob_start();
         include_once $file_name;
-        $data = ob_get_clean();
-        return $data;
+        return $data = ob_get_clean();
+    }
+    
+    abstract public function get();
+    
+    public function add() {
+        $this->_response->setStatusCode(Response::STATUS_CODE_405);
+        
+    }
+    
+    public function update() {
+        $this->_response->setStatusCode(Response::STATUS_CODE_405); 
+    }
+    
+    public function delete(){
+        $this->_response->setStatusCode(Response::STATUS_CODE_405);
     }
 }
-

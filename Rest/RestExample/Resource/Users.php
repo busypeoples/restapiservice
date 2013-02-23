@@ -1,9 +1,8 @@
 <?php
 
-namespace RestExample\Controller;
-use RestExample\AbstractController;
+namespace RestExample\Resource;
 
-class Users extends AbstractController {
+class Users extends \RestExample\Resource {
 
     public function get() {
         $id = $this->getRequest()->getParam('id');
@@ -12,7 +11,7 @@ class Users extends AbstractController {
         } else {
             $data = array('message' => 'retrieved all data.');
         }
-        $this->getView()->setParam('data', $data);
+        $this->setParam('data', $data);
     }
 
     public function add() {
@@ -22,7 +21,7 @@ class Users extends AbstractController {
                     '...successfully added a new user' . 
                     'with the name = ' . $name 
                     );
-        $this->getView()->setParam('data', $data);
+        $this->setParam('data', $data);
     }
 
     public function update() {
@@ -33,7 +32,7 @@ class Users extends AbstractController {
                         '... successfully updated ID : ' . $id . 
                         'with the name = ' . $name                    
                     );
-        $this->getView()->setParam('data', $data);
+        $this->setParam('data', $data);
     }
 
     public function delete() {
@@ -41,7 +40,7 @@ class Users extends AbstractController {
         $data = array(' message' => 'Called Action : ' .  __FUNCTION__ .
                               '...  successfully deleted user with the ID : ' . $id
                         );
-        $this->getView()->setParam('data', $data);
+        $this->setParam('data', $data);
     }
 
 }
