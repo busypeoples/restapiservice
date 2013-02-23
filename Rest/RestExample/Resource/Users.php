@@ -12,6 +12,7 @@ class Users extends \RestExample\Resource {
             $data = array('message' => 'retrieved all data.');
         }
         $this->setParam('data', $data);
+        $this->getResponse()->setStatusCode("200 OK");
     }
 
     public function postAction() {
@@ -22,6 +23,7 @@ class Users extends \RestExample\Resource {
                     'with the name = ' . $name 
                     );
         $this->setParam('data', $data);
+        $this->getResponse()->setStatusCode("201 CREATED");
     }
 
     public function putAction() {
@@ -33,6 +35,7 @@ class Users extends \RestExample\Resource {
                         'with the name = ' . $name                    
                     );
         $this->setParam('data', $data);
+        $this->getResponse()->setStatusCode("200 OK");
     }
 
     public function deleteAction() {
@@ -41,6 +44,7 @@ class Users extends \RestExample\Resource {
                               '...  successfully deleted user with the ID : ' . $id
                         );
         $this->setParam('data', $data);
+        $this->getResponse()->setStatusCode("200 OK");
     }
 
 }

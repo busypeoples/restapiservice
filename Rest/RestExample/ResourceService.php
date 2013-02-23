@@ -3,6 +3,7 @@
 namespace RestExample;
 
 use RestExample\Exception\ResourceNotFound;
+use RestExample\Exception\MethodNotAllowed;
 
 class ResourceService {
     
@@ -17,21 +18,13 @@ class ResourceService {
         try {
             $resource = $this->loadResource($request, $response);
             $this->callRequestMethod($request, $resource);
-            $body = $resource->execute();
-            $status_code = \RestExample\Response::STATUS_CODE_200;
-            if ($request->getRequestMethod() == 'POST') {
-                $status_code = \RestExample\Response::STATUS_CODE_201;
-                // add Location header...
-                $response->addHeader('Location', 'newly created resouce uri');
-            }
             $response->addHeader('Content-Type', $this->getContentType($request->getHttpAccept()));
+            $response->setBody($resource->getRepresentation());
         } catch(\Exception $e) {
-            $status_code = $e->getCode();
-            $body = $e->getMessage(); 
+            $response->setStatusCode($e->getCode());
+            $response->setBody($e->getMessage());
         }
         
-        $response->setStatusCode($status_code);
-        $response->setBody($body);
         $response->output();   
     }
 
@@ -54,7 +47,7 @@ class ResourceService {
     public function callRequestMethod(Request $request, Resource $resource) {
         $method = $request->getRequestMethod() . 'Action';
         if (!method_exists($resource, $method)) {
-            throw new \Exception('Method not allowed', 405);
+            throw new MethodNotAllowed();
         }
         
         $resource->$method();

@@ -53,6 +53,13 @@ abstract class Resource {
     
     /**
      * 
+     * @return Response
+     */
+    public function getResponse() {
+        return $this->_response;
+    }
+    /**
+     * 
      * @param string $key
      * @param mixed $value
      * @return Resource
@@ -75,15 +82,6 @@ abstract class Resource {
     }
     
     /**
-     * Calls the view render method and passes the request and response.
-     * 
-     * @return string|null
-     */
-    public function execute() {
-        return $this->createRepresentation();
-    }
-    
-    /**
      * Handles the view rendering.
      * And sets the body content.
      * 
@@ -91,8 +89,8 @@ abstract class Resource {
      * @return string|null
      * @throws RepresentationNotFound
      */
-    public function createRepresentation() {
-        $file_name = BASE_PATH . '/representation/' . $this->getRequest()->getHttpAccept() . '/' . strtolower($this->getRequest()->getResourceName()) . '.php'; 
+    public function getRepresentation() {
+        $file_name = BASE_PATH . '/Representation/' . $this->getRequest()->getHttpAccept() . '/' . strtolower($this->getRequest()->getResourceName()) . '.php'; 
         if (!file_exists($file_name)) {
             throw new RepresentationNotFound();
         }
@@ -104,14 +102,14 @@ abstract class Resource {
     abstract public function getAction();
     
     public function postAction() {
-        $this->_response->setStatusCode(Response::STATUS_CODE_405); 
+        $this->getResponse()->setStatusCode(Response::STATUS_CODE_405); 
     }
     
     public function putAction() {
-        $this->_response->setStatusCode(Response::STATUS_CODE_405); 
+        $this->getResponse()->setStatusCode(Response::STATUS_CODE_405); 
     }
     
     public function deleteAction(){
-        $this->_response->setStatusCode(Response::STATUS_CODE_405);
+        $this->getResponse()->setStatusCode(Response::STATUS_CODE_405);
     }
 }
