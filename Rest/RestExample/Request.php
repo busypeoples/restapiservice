@@ -8,7 +8,7 @@ class Request {
     protected $_request_params = array();
     
     /** @var string */
-    protected $_controller;
+    protected $_resource;
     
     /** @var string */
     protected $_request_method;
@@ -30,7 +30,6 @@ class Request {
     const POST = 'POST';
     const PUT = 'PUT';
     const DELETE = 'DELETE';
-    const DEFAULT_CONTROLLER = 'Index';
     
     const XML = 'xml';
     const JSON = 'json';
@@ -45,7 +44,7 @@ class Request {
         $this->prepareRequestParams();
         $url_path = explode('/', $_SERVER['PATH_INFO']);
         unset($url_path[0]);
-        $this->_controller = array_shift($url_path);
+        $this->_resource = array_shift($url_path);
         $this->setParam('id', array_shift($url_path));
         $this->_content_type = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : null;
     }
@@ -97,10 +96,7 @@ class Request {
      * @return string
      */
     public function getResourceName() {
-        if (!$this->_controller) {
-            return self::DEFAULT_CONTROLLER;
-        }
-        return ucfirst($this->_controller);
+        return ucfirst($this->_resource);
     }
 
     /**
@@ -142,26 +138,6 @@ class Request {
         return $this->_content_type;
     }
    
-    /** @return bool */
-    public function isGet() {
-        return $this->getRequestMethod() === self::GET;
-    }
-    
-    /** return bool */
-    public function isPost() {
-        return $this->getRequestMethod() === self::POST;
-    }
-
-    /** @return bool */
-    public function isPut() {
-        return $this->getRequestMethod() === self::PUT;
-    }
-    
-    /** @return bool */
-    public function isDelete() {
-        return $this->getRequestMethod() === self::DELETE;
-    }
-
     /**
      * Takes care of setting the correct request method.
      */

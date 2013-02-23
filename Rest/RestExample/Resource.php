@@ -51,7 +51,7 @@ abstract class Resource {
             return $this;
     }
     
-       /**
+    /**
      * 
      * @param string $key
      * @param mixed $value
@@ -83,7 +83,7 @@ abstract class Resource {
         return $this->createRepresentation();
     }
     
-      /**
+    /**
      * Handles the view rendering.
      * And sets the body content.
      * 
@@ -104,8 +104,7 @@ abstract class Resource {
     abstract public function get();
     
     public function add() {
-        $this->_response->setStatusCode(Response::STATUS_CODE_405);
-        
+        $this->_response->setStatusCode(Response::STATUS_CODE_405); 
     }
     
     public function update() {
