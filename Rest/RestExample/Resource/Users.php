@@ -18,9 +18,8 @@ class Users extends \RestExample\Resource {
     public function postAction() {
         $name = $this->getRequest()->getParam('name');
         $data = array(
-                    'message' => 'Called Action : ' . __FUNCTION__ .
-                    '...successfully added a new user' . 
-                    'with the name = ' . $name 
+                    'message' => '...successfully added a new user' . 
+                    ' with the name = ' . $name 
                     );
         $this->setParam('data', $data);
         $this->getResponse()->setStatusCode("201 CREATED");
@@ -30,9 +29,8 @@ class Users extends \RestExample\Resource {
         $id = $this->getRequest()->getParam('id');
         $name = $this->getRequest()->getParam('name');    
         $data = array(
-                        'message' => 'Called Action : ' . __FUNCTION__ . 
-                        '... successfully updated ID : ' . $id . 
-                        'with the name = ' . $name                    
+                        'message' => '... successfully updated ID : ' . $id . 
+                        ' with the name = ' . $name                    
                     );
         $this->setParam('data', $data);
         $this->getResponse()->setStatusCode("200 OK");
@@ -40,11 +38,9 @@ class Users extends \RestExample\Resource {
 
     public function deleteAction() {
         $id = $this->getRequest()->getParam('id');
-        $data = array(' message' => 'Called Action : ' .  __FUNCTION__ .
-                              '...  successfully deleted user with the ID : ' . $id
+        $data = array(' message' => '...  successfully deleted user with the ID : ' . $id
                         );
         $this->setParam('data', $data);
         $this->getResponse()->setStatusCode("200 OK");
     }
-
 }
