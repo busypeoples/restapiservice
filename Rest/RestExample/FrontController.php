@@ -5,7 +5,7 @@ namespace RestExample;
 use RestExample\Exception\ResourceNotFound;
 use RestExample\Exception\MethodNotAllowed;
 
-class ResourceService {
+class FrontController {
     
     public function run() {
         $request = new Request();
