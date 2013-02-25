@@ -23,6 +23,8 @@ class Users extends \RestExample\Resource {
                     );
         $this->setParam('data', $data);
         $this->getResponse()->setStatusCode("201 CREATED");
+	    // ofcourse the location header should contain a real uri
+	    $this->getResponse()->addHeader('Location', 'Newly created resource URI ');
     }
 
     public function putAction() {
