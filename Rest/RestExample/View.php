@@ -53,7 +53,7 @@ class View {
      * @param \RestExample\Respone $response
      * @return \RestExample\View
      */
-    public function setResponse(Respone $response) {
+    public function setResponse(Response $response) {
         $this->_response = $response;
         return $this;
     }
