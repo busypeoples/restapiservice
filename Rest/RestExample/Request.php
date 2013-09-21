@@ -2,8 +2,9 @@
 
 namespace RestExample;
 
-use RestExample\Helper\Converter;
-
+/**
+ * 
+ */
 class Request {
     
     /** @var array */
@@ -139,27 +140,39 @@ class Request {
     public function getActionMethod() {
         return $this->_map_request_to_action[$this->getRequestMethod()];
     }
-
+    
+    /**
+     * 
+     * @return string
+     */
     public function getContentType() {
         return $this->_content_type;
     }
    
-    /** @return bool */
+    /** 
+     * @return bool 
+     */
     public function isGet() {
         return $this->getRequestMethod() === self::GET;
     }
     
-    /** return bool */
+    /** 
+     * @return bool 
+     */
     public function isPost() {
         return $this->getRequestMethod() === self::POST;
     }
 
-    /** @return bool */
+    /** 
+     * @return bool 
+     */
     public function isPut() {
         return $this->getRequestMethod() === self::PUT;
     }
     
-    /** @return bool */
+    /** 
+     * @return bool 
+     */
     public function isDelete() {
         return $this->getRequestMethod() === self::DELETE;
     }
@@ -181,7 +194,11 @@ class Request {
         }
         $this->_request_params = $data;
     }
-
+    
+    /**
+     * 
+     * @return string
+     */
     protected function prepareHttpAccept() {
         if (strpos($_SERVER['HTTP_ACCEPT'], 'json')) {
             $this->_http_accept = self::JSON;

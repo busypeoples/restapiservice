@@ -4,6 +4,11 @@ namespace RestExample;
 
 use RestExample\Exception\RepresentationNotFound;
 
+/**
+ * 
+ * 
+ * 
+ */
 class View {
     
     /** @var array */
@@ -61,7 +66,6 @@ class View {
         return $this->_response;
     }
     
-    
     /**
      * 
      * @param string $key
@@ -94,14 +98,15 @@ class View {
      * @throws RepresentationNotFound
      */
     public function render() {
-        $file_name = BASE_PATH . '/View/' . $this->getRequest()->getHttpAccept() . '/' . strtolower($this->getRequest()->getControllerName()) . '.php'; 
+        $file_name = APPLICATION_PATH . '/RestExample/View/' . $this->getRequest()->getHttpAccept() . '/' . strtolower($this->getRequest()->getControllerName()) . '.php';
+        
         if (!file_exists($file_name)) {
+            print $file_name;
             throw new RepresentationNotFound("No file found with the name $file_name");
         }
+        
         ob_start();
         include_once $file_name;
-        $data = ob_get_clean();
-        return $data;
+        return $data = ob_get_clean();  
     }
 }
-

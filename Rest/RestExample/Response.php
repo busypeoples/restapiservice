@@ -2,6 +2,11 @@
 
 namespace RestExample;
 
+/**
+ * 
+ * 
+ * 
+ */
 class Response {
     
     /** @var string */

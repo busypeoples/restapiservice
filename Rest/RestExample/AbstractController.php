@@ -2,6 +2,16 @@
 
 namespace RestExample;
 
+/**
+ * controller nase class
+ * 
+ * all action controllers must extend this base class
+ * 
+ * offers standard methods like set/get View
+ * offers standard methods like set/get Request
+ * offers standard methods like set/get Response
+ * 
+ */
 abstract class AbstractController {
     
     /** @var Request */
@@ -99,6 +109,7 @@ abstract class AbstractController {
         if (! $this->_view) {
             $this->_view = new View($this->_request, $this->_response);
         }
+        
         return $this->_view;
     }
     
