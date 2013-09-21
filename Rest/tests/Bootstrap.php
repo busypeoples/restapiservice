@@ -2,4 +2,4 @@
 
 require '../autoload.php';
 
-$app = new \RestExample\Application();
+new \RestExample\Application();
