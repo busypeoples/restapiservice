@@ -6,7 +6,7 @@ To test the application we will use a simple set of curl commands to send reques
 
 We will start with a very simple Request on our application.
 
-curl -i  http://rest.localhost/users
+<b>curl -i  http://rest.localhost/users</b>
 
 This should return a json content-type, as we defined application/json as default content type previously.
 
