@@ -97,7 +97,7 @@ abstract class AbstractController {
      * @return \RestExample\AbstractController
      */
     public function setView(View $view) {
-        $this->view = $view;
+        $this->_view = $view;
         return $this;
     }
     
