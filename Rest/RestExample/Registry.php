@@ -68,7 +68,7 @@ class Registry {
      * 
      */
     public function has($key) {
-        return isset($key, $this->collection);
+        return array_key_exists($key, $this->collection);
     }
     
 }
