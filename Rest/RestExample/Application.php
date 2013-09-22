@@ -3,28 +3,49 @@
 namespace RestExample;
 
 /**
- * Main entry point
  * 
+ * Main entry point
  * 
  */
 class Application {
     
-    public function run() {
-        
-        $request = new \RestExample\Request();
-        $response = new \RestExample\Response();
-        $response->addHeader('Content-Type', \RestExample\Helper\Converter::getContentType($request->getHttpAccept()));
+    /** @var $config array */
+    protected $config;
+   
+    /** @var Request $request */
+    protected $request;
+    
+    /** @var Response $response */
+    protected $response;
 
+
+    public function __construct($config = array()) {
+        $this->config = $config;
+        $this->prepare();
+    }
+    
+    /**
+     * 
+     * Takes of configuring the Application
+     * 
+     */
+    public function prepare() {
+        $this->request = new \RestExample\Request();
+        $this->response = new \RestExample\Response();
+        $this->response->addHeader('Content-Type', \RestExample\Helper\Converter::getContentType($this->request->getHttpAccept()));
+    }
+    
+    public function run() {
         try {
             /** @var \RestExample\AbstractController $controller */
-            $controller = \RestExample\Dispatcher::dispatch($request, $response);
+            $controller = \RestExample\Dispatcher::dispatch($this->request, $this->response);
             $body = $controller->execute();
             $status_code = \RestExample\Helper\Http::STATUS_CODE_200;
             
-            if ($request->getRequestMethod() == 'POST') {
+            if ($this->request->getRequestMethod() == 'POST') {
                 $status_code = \RestExample\Helper\Http::STATUS_CODE_201;
                 // add Location header...
-                $response->addHeader('Location', 'newly created resouce uri');
+                $this->response->addHeader('Location', 'newly created resouce uri');
             }
         } catch(\RestExample\Exception\ResourceNotFound $e) {
             $status_code = \RestExample\Helper\Http::STATUS_CODE_404;
@@ -38,9 +59,18 @@ class Application {
         }
 
         // prepare the response and then execute...
-        $response->setStatusCode($status_code);
-        $response->setBody($body);
-        $response->output();
+        $this->handleResponse($status_code, $body);
     }
     
+    /**
+     * 
+     * @param integer $status_code
+     * 
+     * @param string $body
+     */
+    protected function handleResponse($status_code, $body) {
+        $this->response->setStatusCode($status_code);
+        $this->response->setBody($body);
+        $this->response->output();
+    }
 }
